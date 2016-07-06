@@ -39,7 +39,8 @@
     </select>
 
     <select id="findByParams" resultType="Book">
-        SELECT t_book.*,t_booktype.booktype AS 'booktype.booktype',t_publisher.pubname AS 'publisher.pubname' FROM t_book
+        SELECT t_book.*,t_booktype.booktype AS 'booktype.booktype',t_publisher.pubname AS 'publisher.pubname' FROM
+        t_book
         INNER JOIN t_booktype ON t_book.typeid = t_booktype.id
         INNER JOIN t_publisher ON t_book.pubid = t_publisher.id
         <where>
@@ -72,6 +73,31 @@
             </if>
             <if test="pub != null and pub != ''">
                 and pubid = #{pub}
+            </if>
+        </where>
+    </select>
+
+    <select id="findByDataTables" resultType="Book">
+        SELECT t_book.*,t_booktype.booktype AS 'booktype.booktype',t_publisher.pubname AS 'publisher.pubname' FROM
+        t_book
+        INNER JOIN t_booktype ON t_book.typeid = t_booktype.id
+        INNER JOIN t_publisher ON t_book.pubid = t_publisher.id
+        <where>
+            <if test="keyword != null and keyword != ''">
+                bookname LIKE CONCAT('%',#{keyword},'%')
+            </if>
+        </where>
+        <if test="sortColumnsName != null and sortColumnsName != '' and sortType != null and sortType != ''">
+            ORDER BY ${sortColumnsName} ${sortType}
+        </if>
+        limit ${start},${length}
+    </select>
+
+    <select id="countByKeyword" resultType="long">
+        SELECT COUNT(*) FROM t_book
+        <where>
+            <if test="keyword != null and keyword != ''">
+                bookname LIKE CONCAT('%',#{keyword},'%')
             </if>
         </where>
     </select>
