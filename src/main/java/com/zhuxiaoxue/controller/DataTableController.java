@@ -40,26 +40,36 @@ public class DataTableController {
 
         String start = request.getParameter("start");
         String length = request.getParameter("length");
-        String keyword = request.getParameter("search[value]");
-        String columnsIndex = request.getParameter("order[0][column]");
-        String sortType = request.getParameter("order[0][dir]");
-        String sortColumnsName = request.getParameter("columns["+ columnsIndex +"][name]");
+//        String keyword = request.getParameter("search[value]");
+//        String columnsIndex = request.getParameter("order[0][column]");
+//        String sortType = request.getParameter("order[0][dir]");
+//        String sortColumnsName = request.getParameter("columns["+ columnsIndex +"][name]");
+
+        String bookname = request.getParameter("bookname");
+        String typeid = request.getParameter("typeid");
+        String pubid = request.getParameter("pubid");
+
+        bookname = Strings.toUTF8(bookname);
 
         Map<String,Object> params = Maps.newHashMap();
         params.put("start",start);
         params.put("length",length);
-        params.put("keyword",keyword);
-        params.put("sortType",sortType);
-        params.put("sortColumnsName",sortColumnsName);
+//        params.put("keyword",keyword);
+//        params.put("sortType",sortType);
+//        params.put("sortColumnsName",sortColumnsName);
 
-        keyword = Strings.toUTF8(keyword);
-        List<Book> bookList = bookService.findByDataTables(params);
+        params.put("bookname",bookname);
+        params.put("pub",pubid);
+        params.put("type",typeid);
+
+//        keyword = Strings.toUTF8(keyword);
+        List<Book> bookList = bookService.findBookByParam(params);
 
         Map<String,Object> result = Maps.newHashMap();
         result.put("data",bookList);
         result.put("drow",drow);
         result.put("recordsTotal",bookService.count());
-        result.put("recordsFiltered",bookService.countByKeyword(keyword));
+        result.put("recordsFiltered",bookService.countByParam(params));
         return result;
     }
 

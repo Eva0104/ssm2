@@ -9,7 +9,7 @@
 <body>
 <div class="container">
     <div class="page-header">
-        <h3>添加新书籍</h3>
+        <h3>修改书籍信息</h3>
     </div>
     <div class="col-xs-4">
         <form action="" method="post">

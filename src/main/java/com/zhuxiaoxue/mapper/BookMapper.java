@@ -34,4 +34,6 @@ public interface BookMapper {
     List<Book> findByDataTables( Map<String, Object> params);
 
     Long countByKeyword(@Param("keyword") String keyword);
+
+    List<Book> findByParam(Map<String, Object> params);
 }

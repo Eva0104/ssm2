@@ -101,4 +101,24 @@
             </if>
         </where>
     </select>
+    <select id="findByParam" resultType="Book">
+        SELECT t_book.*,t_booktype.booktype AS 'booktype.booktype',t_publisher.pubname AS 'publisher.pubname' FROM
+        t_book
+        INNER JOIN t_booktype ON t_book.typeid = t_booktype.id
+        INNER JOIN t_publisher ON t_book.pubid = t_publisher.id
+        <where>
+            <if test="bookname != null and bookname != ''">
+                bookname LIKE CONCAT('%',#{bookname},'%')
+            </if>
+            <if test="type != null and type != ''">
+                and typeid=#{type}
+            </if>
+            <if test="pub != null and pub != ''">
+                and pubid = #{pub}
+            </if>
+        </where>
+
+        limit ${start},${length}
+
+    </select>
 </mapper>

@@ -12,6 +12,30 @@
     <div class="page-header">
         <h3>书籍列表</h3>
     </div>
+    <div class="well well-sm">
+        <form class="form-inline" method="get">
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="书籍名称" name="bookname" id="search_bookname" value="${bookname}">
+            </div>
+            <div class="form-group">
+                <select class="form-control" name="typeid" id="search_typeid">
+                    <option value="">请选择类型</option>
+                    <c:forEach items="${bookTypeList}" var="type">
+                        <option value="${type.id}" ${type.id == typeid ? 'selected' : ''}>${type.booktype}</option>
+                    </c:forEach>
+                </select>
+            </div>
+            <div class="form-group">
+                <select class="form-control" name="pubid" id="search_pubid">
+                    <option value="">请选择出版社</option>
+                    <c:forEach items="${bookPubList}" var="pub">
+                        <option value="${pub.id}" ${pub.id == pubid ? 'selected' : ''}>${pub.pubname}</option>
+                    </c:forEach>
+                </select>
+            </div>
+            <button class="btn btn-primary" type="button" id="searchBtn">搜索</button>
+        </form>
+    </div>
     <a class="btn btn-success" href="javaScript:;" id="addBookBtn" style="margin-bottom: 20px">添加新书籍</a>
     <table id="dataTable" class="table">
         <thead>
@@ -149,7 +173,15 @@
         var dataTable = $("#dataTable").DataTable({
             "lengthMenu": [5, 10, 15, 20],
             "serverSide": true,
-            "ajax": "/dataTable/data.json",
+            "ajax": {
+                url:"/dataTable/data.json",
+                data:function(dataSource){
+                    dataSource.bookname = $("#search_bookname").val();
+                    dataSource.typeid = $("#search_typeid").val();
+                    dataSource.pubid = $("#search_pubid").val();
+                }
+            },
+            "searching": false,
             "order": [0, 'desc'],
             "columns": [
                 {"data": "id", "name": "id"},
@@ -344,7 +376,10 @@
 
 
         })
-
+        //搜索按钮事件
+        $("#searchBtn").click(function(){
+            dataTable.ajax.reload();
+        })
 
     })
 </script>

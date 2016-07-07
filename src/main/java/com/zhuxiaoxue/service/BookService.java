@@ -88,4 +88,12 @@ public class BookService {
     public Long countByKeyword(String keyword) {
         return bookMapper.countByKeyword(keyword);
     }
+
+    public List<Book> findBookByParam(Map<String, Object> params) {
+        return bookMapper.findByParam(params);
+    }
+
+    public Long countByParam(Map<String, Object> params) {
+        return bookMapper.countByParams(params);
+    }
 }
