@@ -7,6 +7,7 @@ import com.zhuxiaoxue.service.BookService;
 import com.zhuxiaoxue.util.Strings;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,7 +27,8 @@ public class DataTableController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model){
-//        model.addAttribute("bookList",bookService.findAllBooks());
+        model.addAttribute("bookTypeList",bookService.findAllType());
+        model.addAttribute("bookPubList",bookService.findAllPub());
         return "/tables/list";
     }
 
@@ -60,5 +62,34 @@ public class DataTableController {
         result.put("recordsFiltered",bookService.countByKeyword(keyword));
         return result;
     }
+
+    @RequestMapping(value = "/addBook",method = RequestMethod.POST)
+    @ResponseBody
+    public String add(Book book){
+        bookService.save(book);
+        return "success";
+    }
+
+    @RequestMapping(value = "/{id:\\d+}/del",method = RequestMethod.GET)
+    @ResponseBody
+    public String del(@PathVariable Integer id){
+        bookService.del(id);
+        return "success";
+    }
+
+    @RequestMapping(value = "/{id:\\d+}/update.json",method = RequestMethod.GET)
+    @ResponseBody
+    public Book showBook(@PathVariable Integer id){
+        return bookService.findById(id);
+    }
+
+    @RequestMapping(value = "/updateBook",method = RequestMethod.POST)
+    @ResponseBody
+    public String update(Book book){
+        bookService.update(book);
+        return "success";
+    }
+
+
 
 }
